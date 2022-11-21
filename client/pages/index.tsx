@@ -1,47 +1,45 @@
-import { useState } from 'react'
-import { useQuery, gql } from '@apollo/client'
 import Layout from '@components/Layout/Layout'
 import { Card } from 'semantic-ui-react'
 import KawaiiHeader from '@components/KawaiiHeader/KawaiiHeader'
-import { useGetAllAvosQuery } from 'service/graphql'
+import { Avocado, GetAllAvosDocument } from 'service/graphql'
+import type { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { client } from 'service/client'
+import ProductList from '@components/ProductList/ProductList'
 
-const avocadoFragment = `
-  id
-  image
-  name
-  createdAt
-  sku
-`
-const useAvocados = () => {
-  const query = gql`
-    query GetAllAvos {
-      avos {
-        ${avocadoFragment}
+export const getStaticProps: GetStaticProps<{ products: Avocado[] }> =
+  async () => {
+    // const { data, loading } = useQuery(GetAllAvosDocument)
+    try {
+      const response = await client.query({
+        query: GetAllAvosDocument,
+      })
+      if (response.data.avos === null) {
+        throw new Error('Failed to request')
+      }
+
+      const products = response.data.avos as Avocado[]
+
+      return {
+        props: { products },
+      }
+    } catch (e) {
+      console.log(e)
+      return {
+        props: {
+          products: [],
+        },
       }
     }
-  `
-  return useQuery(query)
-}
+  }
 
-const useAvocado = (id: number | string) => {
-  const query = gql`
-  query GetAvo($avoId: ID!) {
-      avo(id: $avoId) {
-        ${avocadoFragment}
-      }
-    }
-  `
-
-  return useQuery(query, { variables: { avoId: id } })
-}
-
-const HomePage = () => {
-  const { data, loading } = useGetAllAvosQuery()
-  console.log({ data, loading })
-
+const HomePage = ({
+  products,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  console.log(products)
   return (
     <Layout title="Home">
       <KawaiiHeader />
+      {products.length && <ProductList products={products} />}
       <Card.Group itemsPerRow={2} centered>
         {documentationList.map((doc) => (
           <Card
@@ -55,13 +53,6 @@ const HomePage = () => {
       </Card.Group>
     </Layout>
   )
-}
-
-function ChildComponent() {
-  const { data, loading } = useAvocado(1)
-  console.log('Single avocado: ', { data, loading })
-
-  return <p>Mounted</p>
 }
 
 const documentationList = [

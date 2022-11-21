@@ -14,3 +14,20 @@ query GetAllAvos {
     }
   }
 }
+
+query GetOneAvo($id: ID!) {
+  avo(id: $id) {
+    id
+    image
+    name
+    createdAt
+    sku
+    price
+    attributes {
+      description
+      taste
+      shape
+      hardiness
+    }
+  }
+}
