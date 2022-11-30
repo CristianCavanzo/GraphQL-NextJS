@@ -28,7 +28,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps<{ product: AvocadoFragment }> =
       }
 
       // Pass post data to the page via props
-      return { props: { product: response.data.avo } }
+      return { props: { product: response.data.avo }, revalidate: 10 }
     } catch (e) {
       return {
         notFound: true,

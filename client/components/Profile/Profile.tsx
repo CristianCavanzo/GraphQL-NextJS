@@ -14,15 +14,15 @@ function Profile({ user }: { user: User }) {
     addAvocado({
       variables: {
         data: {
-          name: 'Zutano Avocado 2',
-          sku: 'MW79asdasZZ6Y',
+          name: 'Zutano Avocado 7',
+          sku: 'UWaU90149',
           description:
             'The Zutano avocado is a cold hardy, consistent producing avocado variety. It resembles the Fuerte in appearance but is less flavorful but more cold hardy. The green fruits are obovate in shape with waxy bumps on the skin. The flesh has a low oil but high water content which causes it to have a more fibrous texture.',
           hardiness: '-5 °C',
           taste: 'Splendid, is an avocado',
           shape: 'Pear',
           image: '/static/zutano.jpg',
-          price: 1.23,
+          price: 2.9,
         },
       },
     })

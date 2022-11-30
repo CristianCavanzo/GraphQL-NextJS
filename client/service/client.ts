@@ -8,7 +8,7 @@ const apiLink = createHttpLink({
 })
 
 const authLink = setContext(async (_, { headers }) => {
-  let extraHeader: Record<string, string> = {}
+  let extraHeader = {}
 
   if (typeof window !== 'undefined') {
     const token = await retrieveToken()
@@ -24,7 +24,6 @@ const authLink = setContext(async (_, { headers }) => {
     },
   }
 })
-
 const client = new ApolloClient({
   link: authLink.concat(apiLink),
   cache: new InMemoryCache({

@@ -11,6 +11,7 @@ export const getStaticProps: GetStaticProps<{ products: AvocadoFragment[] }> =
     try {
       const response = await client.query({
         query: GetAllAvocadosDocument,
+        fetchPolicy: 'network-only',
       })
 
       if (response.data.avos == null) {
@@ -18,7 +19,7 @@ export const getStaticProps: GetStaticProps<{ products: AvocadoFragment[] }> =
       }
 
       const products = response.data.avos as AvocadoFragment[]
-      return { props: { products } }
+      return { props: { products }, revalidate: 10 }
     } catch (e) {
       console.log(e)
       return {
